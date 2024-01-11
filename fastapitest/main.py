@@ -14,5 +14,5 @@ async def custom_root():
     return {"message": "This is custom page :)"}
 
 @app.get("/users")
-async def get_user(user: User):
+async def get_user():
     return {"id": user.id, "name": user.name}
