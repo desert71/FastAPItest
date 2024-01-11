@@ -3,7 +3,10 @@ from fastapi.responses import FileResponse
 from models.model_1 import User
 
 app = FastAPI()
-user = User(id = 1, name = "John Doe")
+user = User(id = 1, name = "John Doe", age= 25)
+
+def is_adult(age: int) -> bool:
+    return age > 18
 
 @app.get("/")
 async def root():
@@ -15,4 +18,8 @@ async def custom_root():
 
 @app.get("/users")
 async def get_user():
-    return {"id": user.id, "name": user.name}
+    return user
+
+@app.post("/user")
+async def post_user(user: User):
+    return {**dict(user), "is_adult": is_adult(user.age)} 
