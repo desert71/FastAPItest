@@ -5,3 +5,9 @@ class UserCreate (BaseModel):
     email: str
     age: int
     is_subscribed: bool
+
+class product (BaseModel):
+    product_id: int
+    name: str
+    category: str
+    price: float
