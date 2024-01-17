@@ -3,7 +3,8 @@ import jwt
 SECRET_KEY = "my_f_sec_key"
 ALORITHM = "HS256"
 
-USERS_DATA = [{"username": "admin", "password": "adminpass"}, {"username": "adminnnn", "password": "adminpass321"}]
+USERS_DATA = [{"username": "admin", "password": "adminpass"}, 
+              {"username": "adminnnn", "password": "adminpass321"}]
 
 # Создание JWT токена на основе нашего ключа, данных и алгоритма
 def create_jwt_token(data: dict):
