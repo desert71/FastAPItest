@@ -16,6 +16,7 @@ async def startup_database():
 async def shutdown_database():
     await database.disconnect()
 
+# Create
 @app.post('/users/', response_model=UserReturn)
 async def create_user(user: UserCreate):
     query = "INSERT INTO users (username, email) VALUES (:username, :email) RETURNING id"
@@ -25,3 +26,28 @@ async def create_user(user: UserCreate):
         return{**user.dict(), "id": user_id}
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Не получилось создать пользователя :(")
+
+# Read    
+@app.get('/user/{user_id}', response_model=UserReturn)
+async def get_user(user_id: int):
+    query = "SELECT * FROM users WHERE id = :user_id"
+    values = {"user_id": user_id}
+    try:
+        result = await database.fetch_one(query=query, values=values)
+    except Exception as e:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Не получилось взять данные пользователя из базы данных")
+    if result:
+        return UserReturn(username=result["username"], email=result["email"])
+    else:
+        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Что-то пользователя не нашлось :(")
+    
+# Update
+@app.put('/user/{user_id}', response_model=UserReturn)
+async def update_user(user_id: int, user: UserCreate):
+    query = "UPDATE users SET username = :username, email = :email WHERE id = :user_id"
+    values = {"user_id": user_id, "username": user.username, "email": user.email}
+    try:
+        await database.execute(query=query, values=values)
+        return {**user.dict(), "id": user_id}
+    except Exception as e:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Не удалось обновить пользователя, сори  :(")
