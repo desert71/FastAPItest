@@ -39,7 +39,7 @@ async def get_user(user_id: int):
     if result:
         return UserReturn(username=result["username"], email=result["email"])
     else:
-        raise HTTPException(status_code=status.HTTP_400_BAD_REQUEST, detail="Что-то пользователя не нашлось :(")
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Что-то пользователя не нашлось :(")
     
 # Update
 @app.put('/user/{user_id}', response_model=UserReturn)
@@ -51,3 +51,17 @@ async def update_user(user_id: int, user: UserCreate):
         return {**user.dict(), "id": user_id}
     except Exception as e:
         raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Не удалось обновить пользователя, сори  :(")
+    
+# Delete
+@app.delete('/user/{user_id}', response_model=dict)
+async def delete_user(user_id: int):
+    query = "DELETE FROM users WHERE id = :user_id RETURNING id"
+    values = {"user_id": user_id}
+    try:
+        delete_rows = await database.execute(query=query, values=values)
+    except Exception as e:
+        raise HTTPException(status_code=status.HTTP_500_INTERNAL_SERVER_ERROR, detail="Не удалось обновить пользователя, сори  :(")
+    if delete_rows:
+        return {"message": f"Удаление юзера {delete_rows} прошло успешно"}
+    else:
+        raise HTTPException(status_code=status.HTTP_404_NOT_FOUND, detail="Что-то пользователя для удаления не нашлось :(")
