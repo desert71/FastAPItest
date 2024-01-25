@@ -1,9 +1,11 @@
 from logging.config import fileConfig
+from os import environ
 
 from sqlalchemy import engine_from_config
 from sqlalchemy import pool
 
 from alembic import context
+from models import Product
 
 # this is the Alembic Config object, which provides
 # access to the values within the .ini file in use.
@@ -11,6 +13,18 @@ config = context.config
 
 # Interpret the config file for Python logging.
 # This line sets up loggers basically.
+# section = config.config_ini_section
+# config.set_section_option(section, "DB_USER", environ.get("DB_USER"))
+# config.set_section_option(section, "DB_PASS", environ.get("DB_PASS"))
+# config.set_section_option(section, "DB_NAME", environ.get("DB_NAME"))
+# config.set_section_option(section, "DB_HOST", environ.get("DB_HOST"))
+
+section = config.config_ini_section
+config.set_section_option(section, "DB_USER", "Alex")
+config.set_section_option(section, "DB_PASS", "Alex_password")
+config.set_section_option(section, "DB_NAME", "myDataBase")
+config.set_section_option(section, "DB_HOST", "localhost")
+
 if config.config_file_name is not None:
     fileConfig(config.config_file_name)
 
@@ -18,7 +32,7 @@ if config.config_file_name is not None:
 # for 'autogenerate' support
 # from myapp import mymodel
 # target_metadata = mymodel.Base.metadata
-target_metadata = None
+target_metadata = Product.metadata
 
 # other values from the config, defined by the needs of env.py,
 # can be acquired:
@@ -57,8 +71,10 @@ def run_migrations_online() -> None:
     and associate a connection with the context.
 
     """
+    print(config.get_main_option("sqlalchemy.url"))
     connectable = engine_from_config(
         config.get_section(config.config_ini_section, {}),
+        #config.get_main_option("sqlalchemy.url"),
         prefix="sqlalchemy.",
         poolclass=pool.NullPool,
     )
