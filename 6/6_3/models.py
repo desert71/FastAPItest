@@ -13,3 +13,8 @@ class User(BaseModel):
     email: EmailStr
     password: constr(min_length=8, max_length=16)
     phone: Optional[str] = "Unknown"
+
+class ErrorResponse(BaseModel):
+    error_code: int
+    error_mgs: str
+    error_detail: str = None
