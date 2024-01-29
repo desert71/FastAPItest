@@ -29,7 +29,7 @@ i=3
 class UserNotFoundException(HTTPException):
     def __init__(self) -> None:
         err = ErrorResponse(error_code=404, error_mgs="Пользователь не найден", error_detail="Вы ввели не верный id пользователя :(")
-        super().__init__(status_code = err.error_code, detail = err.error_detail, headers={"X-ErrorHandleTime": str(datetime.now())})
+        super().__init__(status_code = err.error_code, detail = err.error_detail, headers={"X-ErrorHandleTime": str(datetime.now(tz=3))})
 
 class InvalidUserDataException(RequestValidationError):
     def __init__(self) -> None:
