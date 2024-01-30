@@ -1,8 +1,23 @@
 from fastapi import FastAPI, HTTPException, Request
 from fastapi.routing import APIRoute, APIRouter
 from fastapi.responses import JSONResponse
-from models import User, ErrorResponse
+#from models71 import User, ErrorResponse
 from datetime import datetime
+from pydantic import BaseModel, conint, EmailStr, constr
+from typing import Union, Optional
+
+class User(BaseModel):
+    username: str
+    age: conint(gt=18)
+    email: EmailStr
+    password: constr(min_length=8, max_length=16)
+    phone: Optional[str] = "Unknown"
+
+class ErrorResponse(BaseModel):
+    error_code: int
+    error_mgs: str
+    error_detail: str = None
+
 
 Users = {
     1: {
@@ -48,7 +63,8 @@ async def create_user(usr: User):
     global i
     Users[i] = usr
     i+=1
-    return {"message": "Пользователь создан", **Users}
+    # return {"message": "Пользователь создан", **Users}
+    return {"message": "Пользователь создан"}
 
 async def get_user(user_id: int):
     try:
