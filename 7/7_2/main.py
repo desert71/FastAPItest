@@ -18,9 +18,9 @@ def fetch_data_from_api():
 def process_data(data:dict):
     # какая-то логика обработки данных
     new_data = {}
-    # for key, value in data.items():
-    #     new_data[key.upper()] = value.upper()
-    return data #new_data
+    for key, value in data.items():
+        new_data[str(key).upper()] = str(value).upper()
+    return new_data
 
 # Путь, который извлекает и обратывает данные от внешнего API
 @app.get('/data/')

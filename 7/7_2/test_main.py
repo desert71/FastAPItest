@@ -16,8 +16,8 @@ class TestApp(unittest.TestCase):
         mock_response = {"key": "value"}
         mock_fetch_data.return_value = mock_response
 
-        # Mock функции process_data
-        mock_processed_data = {"KEYs": "VALUE"}
+        # # Mock функции process_data
+        mock_processed_data = {"KEYss": "VALUE"}
         mock_process_data.return_value = mock_processed_data
 
         # Вызов тестируемой функции
