@@ -6,7 +6,7 @@ authors = ["desert71 <amkazennov99@gmail.com>"]
 readme = "README.md"
 
 [tool.poetry.dependencies]
-python = "^3.12"
+python = "^3.10"
 fastapi = {extras = ["all"], version = "^0.108.0"}
 uvicorn = {extras = ["standard"], version = "^0.25.0"}
 pyjwt = "^2.8.0"
